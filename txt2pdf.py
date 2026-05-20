@@ -159,7 +159,7 @@ replace('AuthorHere',        args.author)
 replace('AuthorInHeaderHere',args.author)
 
 if not args.JuliaMono:
-  replace(' CharacterVariant=4, StylisticSet={4}, StylisticSet={10}','')
+  replace(' CharacterVariant=4, CharacterVariant=7, StylisticSet={4}, StylisticSet={10}','')
 
 # PRINT TEX SOURCE
 
