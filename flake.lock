@@ -1,0 +1,69 @@
+{
+  "nodes": {
+    "check-unicode-coverage": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-24-11-darwin": [
+          "nixpkgs-24-11-darwin"
+        ],
+        "nixpkgs-24-11-linux": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1760713187,
+        "narHash": "sha256-d83GrKTRVa2QMpsCFFfeY2ylpyxa3bDjqgWsaPTz0OY=",
+        "owner": "anderslundstedt",
+        "repo": "check-unicode-coverage",
+        "rev": "282f429ed71cafd15dd2305a418c32c32a0cc1dc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anderslundstedt",
+        "repo": "check-unicode-coverage",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1778869304,
+        "narHash": "sha256-30sZNZoA1cqF5JNO9fVX+wgiQYjB7HJqqJ4ztCDeBZE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "d233902339c02a9c334e7e593de68855ad26c4cb",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixpkgs-unstable",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs-24-11-darwin": {
+      "locked": {
+        "lastModified": 1751290243,
+        "narHash": "sha256-kNf+obkpJZWar7HZymXZbW+Rlk3HTEIMlpc6FCNz0Ds=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "5ab036a8d97cb9476fbe81b09076e6e91d15e1b6",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixpkgs-24.11-darwin",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "check-unicode-coverage": "check-unicode-coverage",
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-24-11-darwin": "nixpkgs-24-11-darwin"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
