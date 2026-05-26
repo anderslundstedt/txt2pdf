@@ -60,7 +60,7 @@ parser_author_group.add_argument(
 parser.add_argument(
   '--text-width',
   type    = int,
-  default = 80,
+  default = 70,
   help    = 'number of characters per line',
 )
 parser.add_argument('--allow-line-overflow',  action='store_true',default=False)
