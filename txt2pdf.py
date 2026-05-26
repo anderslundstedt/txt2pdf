@@ -180,6 +180,7 @@ replace('TitleHere',         filename)
 replace('FileNameHere',      filename)
 replace('DateTimeHere',      date_str)
 replace('AuthorInHeaderHere',args.author)
+replace('TextWidthHere',     args.text_width*'x')
 
 if not args.JuliaMono:
   replace(' CharacterVariant=4, CharacterVariant=7, StylisticSet={4}, StylisticSet={10}','')
