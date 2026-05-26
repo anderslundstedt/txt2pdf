@@ -26,17 +26,36 @@ parser = argparse.ArgumentParser(
   description     = 'Convert Unicode to pdf.',
   formatter_class = argparse.ArgumentDefaultsHelpFormatter,
 )
-parser.add_argument(
+parser_font_group : F = parser.add_mutually_exclusive_group()
+parser_font_group.add_argument(
+  '--font',
+  type    = str,
+  default = default_font_path,
+  help    = 'path to font file',
+)
+parser_font_group.add_argument(
+  '--Iosevka',
+  action  = 'store_true',
+  help    ='Use font Iosevka (custom built extra extended slab variant).',
+  default = False,
+)
+parser_font_group.add_argument(
+  '--JuliaMono',
+  action  = 'store_true',
+  help    ='Use font JuliaMono.',
+  default = False,
+)
+parser_author_group : F = parser.add_mutually_exclusive_group()
+parser_author_group.add_argument(
   '--author',
   type    = str,
   default ='Anders E.V. Lundstedt',
   help    = 'author',
 )
-parser.add_argument(
-  '--font',
-  type    = str,
-  default = default_font_path,
-  help    = 'path to font file',
+parser_author_group.add_argument(
+  '--no-author',
+  action  = 'store_true',
+  default = False,
 )
 parser.add_argument(
   '--text-width',
@@ -54,12 +73,6 @@ parser.add_argument(
   '--title-page',
   action  = 'store_true',
   help    ='Start page numbering on 0 and no header nor footer on first page.',
-  default = False,
-)
-parser.add_argument(
-  '--JuliaMono',
-  action  = 'store_true',
-  help    ='Use font JuliaMono font. (Overrides --font.)',
   default = False,
 )
 parser.add_argument(
@@ -94,9 +107,13 @@ if not args.allow_line_overflow:
 font_path : F[str] = (
   os.path.join(script_dir_path,'JuliaMono-Light.ttf')
   if args.JuliaMono else
+  os.path.join(
+    script_dir_path,
+    'IosevkaCustom-Fixed-Slab-ExtraExtended-Regular.ttf'
+  )
+  if args.Iosevka else
   args.font
 )
-
 
 # COPY FILES TO A TMP DIR
 
@@ -121,6 +138,12 @@ def replace(find:str,repl:str):
     for line in f:
       print(line.replace(find,repl),end='')
 
+if args.no_author:
+  replace('\\author{AuthorHere}\n','')
+  replace('{\\footnotesize AuthorInHeaderHere}','')
+else:
+  replace('AuthorHere',args.author)
+
 if args.title_page:
   replace('%%% \\thispagestyle{empty}','\\thispagestyle{empty}')
   replace('%%% \\setcounter{page}{0}','\\setcounter{page}{0}')
@@ -131,21 +154,22 @@ if args.no_page_numbers:
 if args.no_header:
   replace('{\\footnotesize FileNameHere (DateTimeHere)}','')
   replace('{\\footnotesize AuthorInHeaderHere}','')
-else:
-  if    args.no_filename_in_header and     args.no_datetime_in_header:
-    replace('{\\footnotesize FileNameHere (DateTimeHere)}','')
-  if    args.no_filename_in_header and not args.no_datetime_in_header:
-    replace(
-        '{\\footnotesize FileNameHere (DateTimeHere)}',
-        '{\\footnotesize DateTimeHere}',
-    )
-  if not args.no_filename_in_header and args.no_datetime_in_header:
-    replace(
-        '{\\footnotesize FileNameHere (DateTimeHere)}',
-        '{\\footnotesize FileNameHere}',
-    )
-  if args.no_author_in_header:
-    replace('{\\footnotesize AuthorInHeaderHere}','')
+
+if args.no_author_in_header:
+  replace('{\\footnotesize AuthorInHeaderHere}','')
+
+if    args.no_filename_in_header and     args.no_datetime_in_header:
+  replace('{\\footnotesize FileNameHere (DateTimeHere)}','')
+if    args.no_filename_in_header and not args.no_datetime_in_header:
+  replace(
+      '{\\footnotesize FileNameHere (DateTimeHere)}',
+      '{\\footnotesize DateTimeHere}',
+  )
+if not args.no_filename_in_header and args.no_datetime_in_header:
+  replace(
+      '{\\footnotesize FileNameHere (DateTimeHere)}',
+      '{\\footnotesize FileNameHere}',
+  )
 
 filename  : F[str]        = os.path.basename(args.input)
 date_cmd_std_out : F[str] =\
@@ -155,7 +179,6 @@ date_str  : F[str]        = date_cmd_std_out.strip()
 replace('TitleHere',         filename)
 replace('FileNameHere',      filename)
 replace('DateTimeHere',      date_str)
-replace('AuthorHere',        args.author)
 replace('AuthorInHeaderHere',args.author)
 
 if not args.JuliaMono:

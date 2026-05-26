@@ -15,7 +15,18 @@
     };
   };
 
-  outputs = {self, check-unicode-coverage, nixpkgs, ...}: (
+  inputs.iosevka-custom-fixed-slab-extra-extended = {
+    url = "github:anderslundstedt/iosevka-custom-fixed-slab-extra-extended";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  outputs = {
+    self,
+    check-unicode-coverage,
+    iosevka-custom-fixed-slab-extra-extended,
+    nixpkgs,
+    ...
+  }: (
     let
       # to work with older version of flakes
       lastModifiedDate =
@@ -38,29 +49,36 @@
           python-pkgs: (
             builtins.filter(x: x != 0) [
               (if is-dev-shell then python-pkgs.ipython else 0)
-              (if is-dev-shell then python-pkgs.pyright else 0)
+              (if is-dev-shell then pkgs.pyright        else 0)
             ]
           )
         )
       );
 
-      get-check-unicode-coverage =
-        system: check-unicode-coverage.defaultPackage.${system};
+      get-iosevka = (
+        system:
+        iosevka-custom-fixed-slab-extra-extended.defaultPackage.${system}
+      );
+
     in {
       devShell = forAllSystems(system:
         let
-          pkgs                   = nixpkgs.legacyPackages.${system};
+          pkgs = nixpkgs.legacyPackages.${system};
         in (
           pkgs.mkShell {
             buildInputs = [
-              (get-check-unicode-coverage system)
-              (get-python-env pkgs false)
+              check-unicode-coverage.defaultPackage.${system}
               pkgs.coreutils
               pkgs.texliveSmall
+              (get-python-env pkgs true)
             ];
             shellHook = ''
               cp ${pkgs.cm_unicode}/share/fonts/opentype/cmuntt.otf          .
               cp ${pkgs.julia-mono}/share/fonts/truetype/JuliaMono-Light.ttf .
+              cp \
+                ${get-iosevka system}/share/fonts/truetype/IosevkaCustom-Fixed-Slab-ExtraExtended-Regular.ttf \
+                .
+              chmod -x IosevkaCustom-Fixed-Slab-ExtraExtended-Regular.ttf
             '';
           }
         )
@@ -81,15 +99,19 @@
 
             installPhase = ''
               mkdir -p $out/bin
-              cp ${./txt2pdf.py}                                             $out/txt2pdf
-              cp ${pkgs.cm_unicode}/share/fonts/opentype/cmuntt.otf          $out/cmuntt.otf
-              cp ${pkgs.julia-mono}/share/fonts/truetype/JuliaMono-Light.ttf $out/JuliaMono-Light.ttf
-              cp ${./template.tex}                                           $out/template.tex
+              cp ${./txt2pdf.py}                                              $out/txt2pdf
+              cp ${./template.tex}                                            $out/template.tex
+              cp ${pkgs.cm_unicode}/share/fonts/opentype/cmuntt.otf           $out/cmuntt.otf
+              cp ${pkgs.julia-mono}/share/fonts/truetype/JuliaMono-Light.ttf  $out/JuliaMono-Light.ttf
+              cp \
+                ${get-iosevka system}/share/fonts/truetype/IosevkaCustom-Fixed-Slab-ExtraExtended-Regular.ttf \
+                $out/IosevkaCustom-Fixed-Slab-ExtraExtended-Regular.ttf
+              chmod -x $out/IosevkaCustom-Fixed-Slab-ExtraExtended-Regular.ttf
               makeWrapper \
                 $out/txt2pdf \
                 $out/bin/txt2pdf \
                 --set PATH ${nixpkgs.lib.makeBinPath [
-                  (get-check-unicode-coverage system)
+                  check-unicode-coverage.defaultPackage.${system}
                   pkgs.coreutils
                   pkgs.texliveSmall
                   (get-python-env pkgs false)
