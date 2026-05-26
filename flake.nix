@@ -69,6 +69,8 @@
             buildInputs = [
               check-unicode-coverage.defaultPackage.${system}
               pkgs.coreutils
+              pkgs.gh
+              pkgs.gh-markdown-preview
               pkgs.texliveSmall
               (get-python-env pkgs true)
             ];
