@@ -45,6 +45,8 @@ Pull requests updating this README are very welcome!
       --do-not-remove-tmp-files
   ```
 
+  (The output of the above example run may not be up to date.)
+
 - Without a flake-enabled nixpkgs install: sorry but you are on your own. I
   very much welcome pull requests adding instructions for how to install or run
   on other systems.
