@@ -3,28 +3,33 @@
 {
   description = "CLI tool to make a PDF of a raw text file";
 
-  inputs.nixpkgs.url                = "nixpkgs/nixpkgs-unstable";
-  inputs.nixpkgs-24-11-darwin.url   = "nixpkgs/nixpkgs-24.11-darwin";
+  inputs.nixpkgs-unstable.url      = "nixpkgs/nixpkgs-unstable";
+  inputs.nixpkgs-24-11-darwin.url  = "nixpkgs/nixpkgs-24.11-darwin";
+  inputs.nixpkgs-24-11-linux.url   = "nixpkgs/nixos-24.11";
+  inputs.nixpkgs-stable-darwin.url = "nixpkgs/nixpkgs-25.11-darwin";
+  inputs.nixpkgs-stable-linux.url  = "nixpkgs/nixos-25.11";
 
   inputs.check-unicode-coverage = {
     url    = "github:anderslundstedt/check-unicode-coverage";
     inputs = {
-      nixpkgs.follows              = "nixpkgs";
+      nixpkgs-unstable.follows     = "nixpkgs-unstable";
       nixpkgs-24-11-darwin.follows = "nixpkgs-24-11-darwin";
-      nixpkgs-24-11-linux.follows  = "nixpkgs";
+      nixpkgs-24-11-linux.follows  = "nixpkgs-24-11-linux";
     };
   };
 
   inputs.iosevka-custom-fixed-slab-extra-extended = {
     url = "github:anderslundstedt/iosevka-custom-fixed-slab-extra-extended";
-    inputs.nixpkgs.follows = "nixpkgs";
+    inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
+    inputs.nixpkgs-darwin.follows   = "nixpkgs-stable-darwin";
+    inputs.nixpkgs-linux.follows    = "nixpkgs-stable-linux";
   };
 
   outputs = {
     self,
     check-unicode-coverage,
     iosevka-custom-fixed-slab-extra-extended,
-    nixpkgs,
+    nixpkgs-unstable,
     ...
   }: (
     let
@@ -42,7 +47,7 @@
 
       # helper function to generate an attrset
       # '{ x86_64-linux = f "x86_64-linux"; ... }'.
-      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+      forAllSystems = nixpkgs-unstable.lib.genAttrs supportedSystems;
 
       get-python-env = pkgs: is-dev-shell: (
         pkgs.python313.withPackages (
@@ -63,7 +68,7 @@
     in {
       devShell = forAllSystems(system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
+          pkgs = nixpkgs-unstable.legacyPackages.${system};
         in (
           pkgs.mkShell {
             buildInputs = [
@@ -88,7 +93,7 @@
 
       defaultPackage = forAllSystems(system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
+          pkgs = nixpkgs-unstable.legacyPackages.${system};
         in (
           pkgs.stdenv.mkDerivation {
             name = "txt2pdf-${version}";
@@ -112,7 +117,7 @@
               makeWrapper \
                 $out/txt2pdf \
                 $out/bin/txt2pdf \
-                --set PATH ${nixpkgs.lib.makeBinPath [
+                --set PATH ${nixpkgs-unstable.lib.makeBinPath [
                   check-unicode-coverage.defaultPackage.${system}
                   pkgs.coreutils
                   pkgs.texliveSmall
