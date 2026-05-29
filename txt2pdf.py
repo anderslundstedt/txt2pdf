@@ -204,7 +204,10 @@ run_cmd(['xelatex','template.tex'],cwd=tmp_dir_path)
 
 shutil.move(
   os.path.join(tmp_dir_path,'template.pdf'),
-  os.path.splitext(args.input)[0]+'.pdf',
+  os.path.join(
+    os.getcwd(),
+    os.path.splitext(os.path.basename(args.input))[0]+'.pdf'
+  ),
 )
 
 # REMOVE TMP DIR
