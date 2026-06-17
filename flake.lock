@@ -39,11 +39,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779976562,
-        "narHash": "sha256-zlQ0NwkZ8Gx1HO/Cu9mRXi/1m+y5B68LP1Vf4l9pI4Y=",
+        "lastModified": 1781734766,
+        "narHash": "sha256-ODWRoQuyghw1LSe2bhxQX10rclFrgit83sgGpXI8cwM=",
         "owner": "anderslundstedt",
         "repo": "iosevka-custom-fixed-slab-extra-extended",
-        "rev": "febe6b401559e036cedc958cc5930b620aeb1217",
+        "rev": "87e26ed6554df1386f6e1afe480c8e825a23a894",
         "type": "github"
       },
       "original": {
