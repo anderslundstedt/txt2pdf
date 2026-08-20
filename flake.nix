@@ -6,8 +6,8 @@
   inputs.nixpkgs-unstable.url      = "nixpkgs/nixpkgs-unstable";
   inputs.nixpkgs-24-11-darwin.url  = "nixpkgs/nixpkgs-24.11-darwin";
   inputs.nixpkgs-24-11-linux.url   = "nixpkgs/nixos-24.11";
-  inputs.nixpkgs-stable-darwin.url = "nixpkgs/nixpkgs-25.11-darwin";
-  inputs.nixpkgs-stable-linux.url  = "nixpkgs/nixos-25.11";
+  inputs.nixpkgs-stable-darwin.url = "nixpkgs/nixpkgs-26.05-darwin";
+  inputs.nixpkgs-stable-linux.url  = "nixpkgs/nixos-26.05";
 
   inputs.check-unicode-coverage = {
     url    = "github:anderslundstedt/check-unicode-coverage";
