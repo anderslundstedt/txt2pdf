@@ -3,27 +3,17 @@
 {
   description = "CLI tool to make a PDF of a raw text file";
 
-  inputs.nixpkgs-unstable.url      = "nixpkgs/nixpkgs-unstable";
-  inputs.nixpkgs-24-11-darwin.url  = "nixpkgs/nixpkgs-24.11-darwin";
-  inputs.nixpkgs-24-11-linux.url   = "nixpkgs/nixos-24.11";
-  inputs.nixpkgs-stable-darwin.url = "nixpkgs/nixpkgs-26.05-darwin";
-  inputs.nixpkgs-stable-linux.url  = "nixpkgs/nixos-26.05";
+  inputs.pins.url = "github:anderslundstedt/nix-pins";
 
-  inputs.check-unicode-coverage = {
-    url    = "github:anderslundstedt/check-unicode-coverage";
-    inputs = {
-      nixpkgs-unstable.follows     = "nixpkgs-unstable";
-      nixpkgs-24-11-darwin.follows = "nixpkgs-24-11-darwin";
-      nixpkgs-24-11-linux.follows  = "nixpkgs-24-11-linux";
-    };
-  };
+  inputs.nixpkgs-unstable.follows = "pins/nixpkgs-unstable";
 
-  inputs.iosevka-custom-fixed-slab-extra-extended = {
-    url = "github:anderslundstedt/iosevka-custom-fixed-slab-extra-extended";
-    inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
-    inputs.nixpkgs-darwin.follows   = "nixpkgs-stable-darwin";
-    inputs.nixpkgs-linux.follows    = "nixpkgs-stable-linux";
-  };
+  inputs.check-unicode-coverage.url =
+    "github:anderslundstedt/check-unicode-coverage";
+  inputs.check-unicode-coverage.inputs.pins.follows = "pins";
+
+  inputs.iosevka-custom-fixed-slab-extra-extended.url =
+    "github:anderslundstedt/iosevka-custom-fixed-slab-extra-extended";
+  inputs.iosevka-custom-fixed-slab-extra-extended.inputs.pins.follows = "pins";
 
   outputs = {
     self,
