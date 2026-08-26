@@ -19,15 +19,10 @@
     },
     "check-unicode-coverage": {
       "inputs": {
-        "nixpkgs-darwin-24-11": [
+        "flake-utils": [
           "check-unicode-coverage",
           "pins",
-          "nixpkgs-darwin-24-11"
-        ],
-        "nixpkgs-linux-24-11": [
-          "check-unicode-coverage",
-          "pins",
-          "nixos-24-11"
+          "flake-utils"
         ],
         "nixpkgs-unstable": [
           "check-unicode-coverage",
@@ -39,11 +34,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787511839,
-        "narHash": "sha256-S8UWQINbyPGbQSYOugrsMM0inh48yArkBuAQ33S+yaI=",
+        "lastModified": 1787755688,
+        "narHash": "sha256-gVyW3+n4Y72+JoSJQ6yKqhcr2PFTiZ4jKuoSYQ7Ucts=",
         "owner": "anderslundstedt",
         "repo": "check-unicode-coverage",
-        "rev": "c769072a8f4f146c640d339e555008b920f303ed",
+        "rev": "ae6479df0b264333a807ee54e1c5c4d69074d8e1",
         "type": "github"
       },
       "original": {
@@ -148,31 +143,21 @@
     },
     "iosevka-custom-fixed-slab-extra-extended": {
       "inputs": {
-        "nixpkgs-darwin-stable": [
+        "flake-utils": [
           "iosevka-custom-fixed-slab-extra-extended",
           "pins",
-          "nixpkgs-darwin-stable"
-        ],
-        "nixpkgs-linux-stable": [
-          "iosevka-custom-fixed-slab-extra-extended",
-          "pins",
-          "nixos-stable"
-        ],
-        "nixpkgs-unstable": [
-          "iosevka-custom-fixed-slab-extra-extended",
-          "pins",
-          "nixpkgs-unstable"
+          "flake-utils"
         ],
         "pins": [
           "pins"
         ]
       },
       "locked": {
-        "lastModified": 1787513301,
-        "narHash": "sha256-T5exisSu9gKcYualgiJ9pSEHky/KEg5RM1nxogz5Hlc=",
+        "lastModified": 1787756484,
+        "narHash": "sha256-4J5VVHan7Z6H2P4gTm5RpDduZ6Rf6vNWm7OLpuM/JtE=",
         "owner": "anderslundstedt",
         "repo": "iosevka-custom-fixed-slab-extra-extended",
-        "rev": "b3b0bc77b68c90d8933095064b0a840f6f3f489c",
+        "rev": "d17b0fb3b1cad19080e533df9ffbb9e0dd3ac9d2",
         "type": "github"
       },
       "original": {
@@ -411,6 +396,10 @@
     "root": {
       "inputs": {
         "check-unicode-coverage": "check-unicode-coverage",
+        "flake-utils": [
+          "pins",
+          "flake-utils"
+        ],
         "iosevka-custom-fixed-slab-extra-extended": "iosevka-custom-fixed-slab-extra-extended",
         "nixpkgs-unstable": [
           "pins",

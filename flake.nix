@@ -1,11 +1,9 @@
-# flake based on
-# https://github.com/NixOS/templates/blob/ad0e221dda33c4b564fad976281130ce34a20cb9/bash-hello/flake.nix
 {
   description = "CLI tool to make a PDF of a raw text file";
 
-  inputs.pins.url = "github:anderslundstedt/nix-pins";
-
+  inputs.pins.url                 = "github:anderslundstedt/nix-pins";
   inputs.nixpkgs-unstable.follows = "pins/nixpkgs-unstable";
+  inputs.flake-utils.follows      = "pins/flake-utils";
 
   inputs.check-unicode-coverage.url =
     "github:anderslundstedt/check-unicode-coverage";
@@ -15,13 +13,7 @@
     "github:anderslundstedt/iosevka-custom-fixed-slab-extra-extended";
   inputs.iosevka-custom-fixed-slab-extra-extended.inputs.pins.follows = "pins";
 
-  outputs = {
-    self,
-    check-unicode-coverage,
-    iosevka-custom-fixed-slab-extra-extended,
-    nixpkgs-unstable,
-    ...
-  }: (
+  outputs = inputs@{self,...}:
     let
       # to work with older version of flakes
       lastModifiedDate =
@@ -32,64 +24,50 @@
 
       # confirmed to work on the following systems
       systems-linux    = ["x86_64-linux"  "aarch64-linux"];
-      systems-darwin   = ["x86_64-darwin" "aarch64-darwin"];
+      systems-darwin   = ["aarch64-darwin"];
       supportedSystems = systems-linux ++ systems-darwin;
-
-      # helper function to generate an attrset
-      # '{ x86_64-linux = f "x86_64-linux"; ... }'.
-      forAllSystems = nixpkgs-unstable.lib.genAttrs supportedSystems;
-
-      get-python-env = pkgs: is-dev-shell: (
-        pkgs.python313.withPackages (
-          python-pkgs: (
-            builtins.filter(x: x != 0) [
-              (if is-dev-shell then python-pkgs.ipython else 0)
-              (if is-dev-shell then pkgs.pyright        else 0)
-            ]
-          )
-        )
-      );
-
-      get-iosevka = (
-        system:
-        iosevka-custom-fixed-slab-extra-extended.defaultPackage.${system}
-      );
-
-    in {
-      devShell = forAllSystems(system:
+    in
+      inputs.flake-utils.lib.eachSystem supportedSystems (system:
         let
-          pkgs = nixpkgs-unstable.legacyPackages.${system};
-        in (
-          pkgs.mkShell {
+          nixpkgs-unstable           =
+            inputs.nixpkgs-unstable.legacyPackages.${system};
+          pkg-check-unicode-coverage =
+            inputs.check-unicode-coverage.packages.${system}.default;
+          pkg-iosevka                =
+            inputs.iosevka-custom-fixed-slab-extra-extended.packages.${system}.default;
+          get-python-env   = is-dev-shell: (
+            nixpkgs-unstable.python312.withPackages (python-packages:
+              builtins.filter(x: x != 0) [
+                (if is-dev-shell then python-packages.ipython else 0)
+                python-packages.python-fontconfig
+              ]
+            )
+          );
+        in {
+          devShells.default = nixpkgs-unstable.mkShell {
             buildInputs = [
-              check-unicode-coverage.defaultPackage.${system}
-              pkgs.coreutils
-              pkgs.gh
-              pkgs.gh-markdown-preview
-              pkgs.texliveSmall
-              (get-python-env pkgs true)
+              pkg-check-unicode-coverage
+              nixpkgs-unstable.coreutils
+              nixpkgs-unstable.gh
+              nixpkgs-unstable.gh-markdown-preview
+              nixpkgs-unstable.texliveSmall
+              (get-python-env true)
             ];
             shellHook = ''
-              cp ${pkgs.cm_unicode}/share/fonts/opentype/cmuntt.otf          .
-              cp ${pkgs.julia-mono}/share/fonts/truetype/JuliaMono-Light.ttf .
+              cp ${nixpkgs-unstable.cm_unicode}/share/fonts/opentype/cmuntt.otf          .
+              cp ${nixpkgs-unstable.julia-mono}/share/fonts/truetype/JuliaMono-Light.ttf .
               cp \
-                ${get-iosevka system}/share/fonts/truetype/IosevkaCustom-Fixed-Slab-ExtraExtended-Regular.ttf \
+                ${pkg-iosevka}/share/fonts/truetype/IosevkaCustom-Fixed-Slab-ExtraExtended-Regular.ttf \
                 .
               chmod -x IosevkaCustom-Fixed-Slab-ExtraExtended-Regular.ttf
             '';
-          }
-        )
-      );
+          };
 
-      defaultPackage = forAllSystems(system:
-        let
-          pkgs = nixpkgs-unstable.legacyPackages.${system};
-        in (
-          pkgs.stdenv.mkDerivation {
+          packages.default = nixpkgs-unstable.stdenv.mkDerivation {
             name = "txt2pdf-${version}";
 
             buildInputs = [
-              pkgs.makeWrapper
+              nixpkgs-unstable.makeWrapper
             ];
 
             unpackPhase = "true";
@@ -98,25 +76,23 @@
               mkdir -p $out/bin
               cp ${./txt2pdf.py}                                              $out/txt2pdf
               cp ${./template.tex}                                            $out/template.tex
-              cp ${pkgs.cm_unicode}/share/fonts/opentype/cmuntt.otf           $out/cmuntt.otf
-              cp ${pkgs.julia-mono}/share/fonts/truetype/JuliaMono-Light.ttf  $out/JuliaMono-Light.ttf
+              cp ${nixpkgs-unstable.cm_unicode}/share/fonts/opentype/cmuntt.otf           $out/cmuntt.otf
+              cp ${nixpkgs-unstable.julia-mono}/share/fonts/truetype/JuliaMono-Light.ttf  $out/JuliaMono-Light.ttf
               cp \
-                ${get-iosevka system}/share/fonts/truetype/IosevkaCustom-Fixed-Slab-ExtraExtended-Regular.ttf \
+                ${pkg-iosevka}/share/fonts/truetype/IosevkaCustom-Fixed-Slab-ExtraExtended-Regular.ttf \
                 $out/IosevkaCustom-Fixed-Slab-ExtraExtended-Regular.ttf
               chmod -x $out/IosevkaCustom-Fixed-Slab-ExtraExtended-Regular.ttf
               makeWrapper \
                 $out/txt2pdf \
                 $out/bin/txt2pdf \
                 --set PATH ${nixpkgs-unstable.lib.makeBinPath [
-                  check-unicode-coverage.defaultPackage.${system}
-                  pkgs.coreutils
-                  pkgs.texliveSmall
-                  (get-python-env pkgs false)
+                  pkg-check-unicode-coverage
+                  nixpkgs-unstable.coreutils
+                  nixpkgs-unstable.texliveSmall
+                  (get-python-env false)
                 ]}
             '';
-          }
-        )
+          };
+        }
       );
-    }
-  );
 }
