@@ -34,11 +34,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787755688,
-        "narHash": "sha256-gVyW3+n4Y72+JoSJQ6yKqhcr2PFTiZ4jKuoSYQ7Ucts=",
+        "lastModified": 1790871530,
+        "narHash": "sha256-u4e6n2/cssYXI5s0k/UGPe7M9DLdl2mvKd7TmVL4TqA=",
         "owner": "anderslundstedt",
         "repo": "check-unicode-coverage",
-        "rev": "ae6479df0b264333a807ee54e1c5c4d69074d8e1",
+        "rev": "56644a505a7c61bf62496b3f958e9ea9863cdcf3",
         "type": "github"
       },
       "original": {
@@ -278,16 +278,33 @@
         ]
       },
       "locked": {
-        "lastModified": 1787757598,
-        "narHash": "sha256-XJRD4TiLkeXTtxk/12tsMiE7wk4sD3e7MX0WmkPTmcA=",
+        "lastModified": 1790801137,
+        "narHash": "sha256-2MYbreVqZaWDj8vyrI1vPaM4SGXQSJK3lKGHte/YV6Y=",
         "owner": "anderslundstedt",
         "repo": "iosevka-custom-fixed-slab-extra-extended",
-        "rev": "ba4ea3edf13e70a4dc46a18fbc64a28db4368af0",
+        "rev": "6cb2c3d68b04a9210a8cf49497b2ef9c4bbdbaae",
         "type": "github"
       },
       "original": {
         "owner": "anderslundstedt",
         "repo": "iosevka-custom-fixed-slab-extra-extended",
+        "type": "github"
+      }
+    },
+    "lean-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1776815402,
+        "narHash": "sha256-AYClc7+z+0h5QfVGPGr7ZrzPuaD+IAMtHT/3ZnbSVLE=",
+        "owner": "Julian",
+        "repo": "lean.nvim",
+        "rev": "b7b330a9dd324c0d9d57bb7d9dcbaf871403d3ed",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Julian",
+        "ref": "v2026.4.1",
+        "repo": "lean.nvim",
         "type": "github"
       }
     },
@@ -575,6 +592,7 @@
         "home-manager-linux-stable": "home-manager-linux-stable",
         "homebrew-cask": "homebrew-cask",
         "homebrew-core": "homebrew-core",
+        "lean-nvim": "lean-nvim",
         "nix-auto-follow-darwin": "nix-auto-follow-darwin",
         "nix-auto-follow-linux": "nix-auto-follow-linux",
         "nix-darwin-stable": "nix-darwin-stable",
@@ -589,11 +607,11 @@
         "nixpkgs-unstable": "nixpkgs-unstable"
       },
       "locked": {
-        "lastModified": 1790798416,
-        "narHash": "sha256-tBiju3ePP8p9KeZEKcTfKHZHlO0JEowz61dyaUx3nwQ=",
+        "lastModified": 1790868818,
+        "narHash": "sha256-jbaxP0pSI+80/5zzJIi1l8rqYCNwcisedatvPBbILVA=",
         "owner": "anderslundstedt",
         "repo": "nix-pins",
-        "rev": "00f4c3768817f80625eee6d8e188799e04d31558",
+        "rev": "40c353931f21223aa4103e940461624ce5a41fd8",
         "type": "github"
       },
       "original": {
